@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  database:
+    command: --innodb-use-native-aio=0
+    container_name: database
+    environment:
+      - MYSQL_DATABASE=node_application
+      - MYSQL_ROOT_PASSWORD=root
+    image: mysql:5.7
+    networks:
+      - application_network
+    restart: always
+    tty: true
+    volumes:
+      - ./database:/var/lib/mysql
+
+  node_application:
+    build:
+      context: ./node_application
+    command: dockerize -wait tcp://database:3306 npm start
+    container_name: node_application
+    depends_on:
+      - database
+    networks:
+      - application_network
+    ports:
+      - 3000:3000
+    restart: always
+    volumes:
+      - ./node_application:/usr/src/app
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    networks:
+      - application_network
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx
+
+networks:
+  application_network:
+    driver: bridge
+    name: application_network
