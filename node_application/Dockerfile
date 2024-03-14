@@ -11,11 +11,6 @@ RUN apt-get update \
   && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
   && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
 
-RUN sh removeNodeModulesIfExists.sh
-
-RUN npm install
-
 EXPOSE 3000
 
-# CMD ["npm", "start"]
-
+ENTRYPOINT npm install && npm start
