@@ -18,14 +18,12 @@ services:
   node_application:
     build:
       context: ./node_application
-    command: dockerize -wait tcp://database:3306 docker-entrypoint.sh
+    command: dockerize -wait tcp://database:3306 -timeout 20s docker-entrypoint.sh
     container_name: node_application
     depends_on:
       - database
     networks:
       - application_network
-    ports:
-      - 3000:3000
     volumes:
       - ./node_application:/usr/src/app
 
