@@ -18,7 +18,7 @@ services:
   node_application:
     build:
       context: ./node_application
-    command: dockerize -wait tcp://database:3306 -timeout 20s docker-entrypoint.sh
+    command: dockerize -wait tcp://database:3306 -timeout 20s sh -c "npm install && npm start"
     container_name: node_application
     depends_on:
       - database
@@ -31,11 +31,12 @@ services:
     build:
       context: ./nginx
     container_name: nginx
+    depends_on:
+      - node_application
     networks:
       - application_network
     ports:
       - 8080:80
-    restart: always
     volumes:
       - ./nginx:/etc/nginx
 

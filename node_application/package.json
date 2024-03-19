@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --legacy-watch src/index.js"
+    "start": "nodemon --legacy-watch src/index.js",
+    "installstart": "npm install && npm start"
   },
   "author": "",
   "license": "ISC",
